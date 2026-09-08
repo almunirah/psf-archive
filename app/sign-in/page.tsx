@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 export default function SignInPage() {
   return (
     <main className="auth-shell">
@@ -14,8 +16,10 @@ export default function SignInPage() {
         <form>
           <label>Email / User ID<input type="text" name="identity" autoComplete="username" placeholder="name@agency.gov.my" /></label>
           <label>Password<input type="password" name="password" autoComplete="current-password" placeholder="••••••••" /></label>
-          <button type="button">Sign In</button>
+          <button type="button" disabled title="Production identity provider not configured">Sign In</button>
         </form>
+        <div className="notice">Authentication UI is ready, but production identity/session verification is intentionally disabled until the dedicated PSF Archive auth backend is configured.</div>
+        <Link className="button-link" href="/dashboard">Open Phase 2C Demo Dashboard</Link>
         <small>Role access: Super Admin · Archive Admin · Archivist · Contributor · Viewer</small>
       </section>
     </main>
