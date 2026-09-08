@@ -1,6 +1,12 @@
 import Link from 'next/link';
+import { signIn } from './actions';
 
-export default function SignInPage() {
+type Props = { searchParams: Promise<{ error?: string }> };
+
+export default async function SignInPage({ searchParams }: Props) {
+  const { error } = await searchParams;
+  const configured = Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY);
+
   return (
     <main className="auth-shell">
       <section className="auth-brand">
@@ -13,13 +19,15 @@ export default function SignInPage() {
         <p className="eyebrow">SECURE ACCESS</p>
         <h2>Sign in to PSF Archive</h2>
         <p className="muted">Use your authorized PSF account.</p>
-        <form>
-          <label>Email / User ID<input type="text" name="identity" autoComplete="username" placeholder="name@agency.gov.my" /></label>
-          <label>Password<input type="password" name="password" autoComplete="current-password" placeholder="••••••••" /></label>
-          <button type="button" disabled title="Production identity provider not configured">Sign In</button>
+        <form action={configured ? signIn : undefined}>
+          <label>Email<input type="email" name="email" autoComplete="username" placeholder="name@agency.gov.my" required /></label>
+          <label>Password<input type="password" name="password" autoComplete="current-password" placeholder="••••••••" required /></label>
+          <button type="submit" disabled={!configured}>{configured ? 'Sign In' : 'Auth Backend Not Configured'}</button>
         </form>
-        <div className="notice">Authentication UI is ready, but production identity/session verification is intentionally disabled until the dedicated PSF Archive auth backend is configured.</div>
-        <Link className="button-link" href="/dashboard">Open Phase 2C Demo Dashboard</Link>
+        {error === 'invalid' && <div className="notice">Sign in failed. Check your authorized PSF account credentials.</div>}
+        {error === 'missing' && <div className="notice">Email and password are required.</div>}
+        {!configured && <div className="notice">Supabase foundation is ready in code, but a dedicated PSF Archive Supabase project has not yet been connected.</div>}
+        {!configured && <Link className="button-link" href="/dashboard">Open Phase 2 Demo Dashboard</Link>}
         <small>Role access: Super Admin · Archive Admin · Archivist · Contributor · Viewer</small>
       </section>
     </main>
