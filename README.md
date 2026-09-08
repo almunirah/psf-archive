@@ -1,33 +1,21 @@
 # PSF Archive
 
-Internal archive management and integrity monitoring system for MyFoto backup on NAS_PSF.
+PSF Archive is a dedicated photographic archive management system for Pusat Sumber & Fotografi. MyFoto remains the operational/cataloguing source; PSF Archive provides controlled ingest, preservation metadata, integrity verification, archive search, access governance, restore workflow and NAS readiness.
 
 ## Architecture
+- GitHub: source control and review
+- Vercel: preview/staging only
+- NAS_PSF: future internal production archive storage
+- Storage abstraction prevents Vercel from mounting or receiving office NAS credentials
 
-- Next.js App Router + TypeScript
-- Vercel for development/preview
-- Internal/NAS deployment for production
-- Storage adapter abstraction: mock/local during development, NAS adapter for office deployment
-- MyFoto remains the operational/cataloguing system; PSF Archive manages archive verification, monitoring, search, restore and audit.
+## Phase 2 — Photo Archive Core
+- Super Admin / Archive Admin / Archivist / Contributor / Viewer RBAC
+- Photographic asset and file representation model
+- Preservation lifecycle and SHA-256 fixity rules
+- Rights/access classes and controlled download/restore direction
+- PREMIS-inspired Object / Event / Agent / Rights separation
+- Phase 2C MAMS-style dashboard, ingest screen, photo catalogue and user administration UI
+- Production authentication remains intentionally disabled until a dedicated PSF Archive identity/session backend is configured
 
-## Phase 1 Modules
-
-- Dashboard
-- Archive Records
-- Backup Monitor
-- Integrity Check (SHA-256)
-- Duplicate Detection
-- Metadata
-- Search
-- Restore Queue
-- Audit Log
-- Users & Roles
-- NAS Settings
-
-## Storage Principle
-
-Archive image binaries are not stored in GitHub or Vercel. Production image files remain on NAS_PSF. Credentials and NAS connection details must only be supplied through environment variables/secrets.
-
-## Project Isolation
-
-This repository is an independent PSF Archive project and must not modify or depend on Naskhah Studio.
+## Isolation
+This repository is independent. It must not modify or depend on Naskhah Studio.
